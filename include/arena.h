@@ -24,6 +24,8 @@ Arena* createArena(char* gameType, int* x);
 
 void freeArena(Arena* arena);
 
+void printArenax(Arena* arena);
+
 
 
 

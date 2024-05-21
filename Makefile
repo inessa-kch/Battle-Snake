@@ -1,4 +1,3 @@
-
 CC=gcc
 CFLAGS= -W -Wall -pedantic
 INCLUDE= ./include/

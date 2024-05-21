@@ -27,7 +27,7 @@ Initialise la connexion avec le serveur (ou quitte le programme si elle ne peut 
 - `port` ​: Port du serveur de jeu (Serveur de test : ​8080​)
 - `name` ​: Nom de votre joueur (Attention, le nom doit être unique et identifiable pour chaque participant​)
 
-Le serveur de jeu tourne sur la machine `pc5039` (port 1234), qui est accessible depuis les machines de l'école. Si vous voulez utiliser votre propre machine, il faudra mettre en place un tunnel SSH en passant par la passerelle de l'école `pc5056.polytech.upmc.fr` (cela se fait avec la commande `ssh -N -p 22 <login>@pc5056.polytech.upmc.fr -L 1234:pc5039:1234&` où `<login>` est votre login de Sorbonne Université; le mot de passe associé doit vous être demandé au moment de créer le tunnel)
+Le serveur de jeu tourne sur la machine `pc5039` (port 1234), qui est accessible depuis les machines de l'école. Si vous voulez utiliser votre propre machine, il faudra mettre en place un tunnel SSH en passant par la passerelle de l'école `pc5056.polytech.upmc.fr` (cela se fait avec la commande `ssh -N -p 22 <login>@pc5056.polytech.upmc.fr -L 1234:pc5039:1234 -L 8080:pc5039:8080` où `<login>` est votre login de Sorbonne Université; le mot de passe associé doit vous être demandé au moment de créer le tunnel)
 
 ### `void closeConnection()` 
 Ferme la connection avec le serveur (doit être effectuée pour éviter tout problème)

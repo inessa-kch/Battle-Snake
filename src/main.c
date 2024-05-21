@@ -20,6 +20,7 @@ int main(){
     t_move move;
     
     printArena();
+    printArenax(arena);
     while (Gamerunning){
         
         if (y==0){
@@ -48,5 +49,6 @@ int main(){
             
         }
     }
+    freeArena(arena);
 	return 0;
 }
