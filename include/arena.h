@@ -2,25 +2,23 @@
 #define ARENA_H
 
 
+typedef struct {
+    int wallTop;
+    int wallBottom;
+    int wallLeft;
+    int wallRight;
+} Cell;
 
-
-typedef struct _wall{
-    int x1;
-    int y1;
-    int x2;
-    int y2;
-} Wall;
-
-typedef struct _arena{
-    Wall* walls;
-    int nbWalls;
+typedef struct {
     int sizeX;
     int sizeY;
+    Cell** cells;
 } Arena;
 
 
 
-Arena* createArena(char* gameType, int* x);
+
+Arena* initArena(char* gameType, int* x);
 
 void freeArena(Arena* arena);
 

@@ -9,7 +9,7 @@ int main(){
     
 	connectToServer("localhost",1234,"iness");
     int y;
-    Arena* arena = createArena("TRAINING SUPER_PLAYER",&y);
+    Arena* arena = initArena("TRAINING SUPER_PLAYER",&y);
     int Gamerunning = 1;
     t_move x;
     t_return_code moveSent;
@@ -21,34 +21,34 @@ int main(){
     
     printArena();
     printArenax(arena);
-    while (Gamerunning){
+    // while (Gamerunning){
         
-        if (y==0){
+    //     if (y==0){
             
-            y=1;
-            printf("Enter a move (0 for UP, 1 for RIGHT, 2 for DOWN, 3 for LEFT): \n");
-            scanf("%d", &moveInt);
-            move = (t_move)moveInt;
-            moveSent=sendMove(move);
+    //         y=1;
+    //         printf("Enter a move (0 for UP, 1 for RIGHT, 2 for DOWN, 3 for LEFT): \n");
+    //         scanf("%d", &moveInt);
+    //         move = (t_move)moveInt;
+    //         moveSent=sendMove(move);
             
-            if (moveSent == LOSING_MOVE) {
-                printf("You lost :(\n");
-                Gamerunning=0;
-            }
-            else printArena();
+    //         if (moveSent == LOSING_MOVE) {
+    //             printf("You lost :(\n");
+    //             Gamerunning=0;
+    //         }
+    //         else printArena();
            
-        }
-        else if (y==1){
-            y=0;
-            moveReceived=getMove(&x);
-            if (moveReceived == LOSING_MOVE){
-                printf("You won!! :)\n");
-                 Gamerunning=0;
-            }
-            else printArena();
+    //     }
+    //     else if (y==1){
+    //         y=0;
+    //         moveReceived=getMove(&x);
+    //         if (moveReceived == LOSING_MOVE){
+    //             printf("You won!! :)\n");
+    //              Gamerunning=0;
+    //         }
+    //         else printArena();
             
-        }
-    }
-    freeArena(arena);
+    //     }
+    // }
+    //freeArena(arena);
 	return 0;
 }
