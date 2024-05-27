@@ -6,7 +6,7 @@ OBJ=./obj/
 PROGRAMS= app
 
 
-OBJS = $(OBJ)clientAPI.o $(OBJ)snakeAPI.o $(OBJ)arena.o $(OBJ)main.o
+OBJS = $(OBJ)clientAPI.o $(OBJ)snakeAPI.o $(OBJ)arena.o $(OBJ)snake.o $(OBJ)main.o
 
 all: $(PROGRAMS)
 

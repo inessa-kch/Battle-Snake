@@ -2,6 +2,8 @@
 #define SNAKE_H
 
 
+struct Arena;
+
 typedef struct _snake {
     int x;
     int y;
@@ -11,12 +13,13 @@ typedef struct _snake {
 } Snake;
 
 
-void initSnake(int x, int y, int size);
+Snake* initSnake(int x, int y, int size);
 void freeSnake(Snake* snake);
-void moveSnake(Snake* snake);
 void growSnake(Snake* snake);
-void changeDirection(Snake* snake, int newDir);
-void printSnake(Snake* snake);
+int dirSnake(Snake* s, Arena* a);
+void updateSnakePosition(Snake* head);
+//void changeDirection(Snake* snake, int newDir);
+//void printSnake(Snake* snake);
 
 
 

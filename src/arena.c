@@ -47,18 +47,34 @@ Arena* initArena(char* gameType, int* x) {
 
     for (int i = 0; i < (sizeY); i++) {
         for (int j = 0; j < (sizeX); j++) {
-            arena->cells[i][j].wallTop = 0;
-            arena->cells[i][j].wallBottom = 0;
-            arena->cells[i][j].wallLeft = 0;
-            arena->cells[i][j].wallRight = 0;
+            if (i == 0) {
+                arena->cells[i][j].wallTop = 1;
+            } else {
+                arena->cells[i][j].wallTop = 0;
+            }
+            if (i == sizeY - 1) {
+                arena->cells[i][j].wallBottom = 1;
+            } else {
+                arena->cells[i][j].wallBottom = 0;
+            }
+            if (j == 0) {
+                arena->cells[i][j].wallLeft = 1;
+            } else {
+                arena->cells[i][j].wallLeft = 0;
+            }
+            if (j == sizeX - 1) {
+                arena->cells[i][j].wallRight = 1;
+            } else {
+                arena->cells[i][j].wallRight = 0;
+            }
         }
     }
 
-    for (int i = 0; i < nbWalls; i++) {
-        int x1 = walls[i*4];
-        int y1 = walls[i*4+1];
-        int x2 = walls[i*4+2];
-        int y2 = walls[i*4+3];
+    for (int i = 0; i < nbWalls*4; i+=4) {
+        int x1 = walls[i];
+        int y1 = walls[i+1];
+        int x2 = walls[i+2];
+        int y2 = walls[i+3];
         if (x1 == x2) {
             if (y1 < y2) {
                 arena->cells[y1][x1].wallBottom = 1;
