@@ -12,7 +12,7 @@ int grow;
 int main() {
     connectToServer("localhost", 1234, "iness");
     int y;
-    Arena* arena = initArena("TRAINING SUPER_PLAYER difficulty=1 seed=2002", &y);
+    Arena* arena = initArena("TRAINING RANDOM_PLAYER difficulty=1", &y);
     Snake* mySnake = NULL;
     Snake* enemySnake = NULL;
     if (y == 0) {
@@ -32,10 +32,16 @@ int main() {
     int grow=0;
 
     printArena();
-    printArenax(arena);
+    //myprintArena(arena);
 
     int myTurn = 0;
     int enemyTurn = 0;
+
+    
+    int** distance = (int**)malloc(arena->sizeY * sizeof(int*));
+    for (int i = 0; i < arena->sizeY; i++) {
+        distance[i] = (int*)malloc(arena->sizeX * sizeof(int));
+    }
 
 
     while (Gamerunning) {
@@ -49,14 +55,21 @@ int main() {
 
 
         if (y == 0 && !myTurn) {
-                t_move dir=sendMySnakeMove();
-                moveSnake(&mySnake, dir,grow);
+                markAccessibleCells(arena, mySnake, distance);
+                //t_move dir=decideNextMove(arena, mySnake, distance);
+                t_move dir=decideSafeMove(arena, mySnake, distance);
+                int i=sendMove(dir);
+                if (i==LOSING_MOVE){
+                    printf("You lost\n");
+                    break;
+                }
+                //t_move dir=sendMySnakeMove();
+                moveSnake(&mySnake, dir,grow,arena);
                 ///////////////////////////////////////////
                 //some tests to check if the snake is moving correctly
                 Snake* tmp = mySnake;
                 while (tmp != NULL) {
-                    printf("x1: %d\n", tmp->x);
-                    printf("y1: %d\n", tmp->y);
+                    printf("x1: %d, y1: %d\n", tmp->x, tmp->y);
                     tmp = tmp->suivant;
                 }
             ///////////////////////////////////////////
@@ -67,14 +80,17 @@ int main() {
         } else if (y == 1 && !enemyTurn) {
                 t_move enemyMove;
                 t_return_code moveReceived = getMove(&enemyMove);
+                if (moveReceived == LOSING_MOVE) {
+                    printf("You won\n");
+                    break;
+                }
                 //int j=getEnemySnakePosition(enemySnake);
-                moveSnake(&enemySnake, enemyMove,grow);
+                moveSnake(&enemySnake, enemyMove,grow,arena);
                 ///////////////////////////////////////////
                 //some tests to check if the snake is moving correctly
                 Snake* tmp2 = enemySnake;
                 while (tmp2 != NULL) {
-                    printf("x2: %d\n", tmp2->x);
-                    printf("y2: %d\n", tmp2->y);
+                    printf("x2: %d, y2: %d\n", tmp2->x, tmp2->y);
                     tmp2 = tmp2->suivant;
                 }
                 ///////////////////////////////////////////
@@ -94,6 +110,10 @@ int main() {
         }
 
     }
+    for (int i = 0; i < arena->sizeY; i++) {
+        free(distance[i]);
+    }
+    free(distance);
 
     freeArena(arena);
     freeSnake(mySnake);

@@ -1,6 +1,6 @@
 #ifndef ARENA_H
 #define ARENA_H
-#include "snake.h"
+
 
 
 
@@ -27,7 +27,7 @@ Arena* initArena(char* gameType, int* x);
 
 void freeArena(Arena* arena);
 
-void printArenax(Arena* arena);
+void myprintArena(Arena* arena);
 
 
 

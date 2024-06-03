@@ -4,6 +4,7 @@
 #include "arena.h"
 #include "snake.h"
 
+#define INT_MAX 50
 //le ​joueur 0 (qui joue le premier) commence à la position (2, H/2) et le ​joueur 1​ à la position ​(L-3, H/2)​.
 
 Snake* initSnake(int x, int y) {
@@ -51,7 +52,7 @@ t_move sendMySnakeMove() {
 
 
 
-void moveSnake(Snake** head, t_move dir, int grow) {
+void moveSnake(Snake** head, t_move dir, int grow, Arena* arena) {
  
     int newX = (*head)->x;
     int newY = (*head)->y;
@@ -78,13 +79,10 @@ void moveSnake(Snake** head, t_move dir, int grow) {
     Snake* newHead = (Snake*)malloc(sizeof(Snake));
     newHead->x = newX;
     newHead->y = newY;
-
-
     newHead->suivant = *head;
-
-
     *head = newHead;
-    //arena->cells[newY][newX].snake=1;
+
+    arena->cells[newY][newX].snake=1;
 
     if (!grow) {
         Snake* current = *head;
@@ -93,7 +91,7 @@ void moveSnake(Snake** head, t_move dir, int grow) {
             prev = current;
             current = current->suivant;
         }
-        //arena->cells[current->y][current->x].snake=0;
+        arena->cells[current->y][current->x].snake=0;
         free(current);
         if (prev != NULL)
             prev->suivant = NULL; 
@@ -140,10 +138,18 @@ void markAccessibleCells(Arena* arena,Snake* s,int** distance){
             }
         }
     }
+    for (int i = 0; i < arena->sizeY; i++) {
+        for (int j = 0; j < arena->sizeX; j++) {
+            printf("%d ", distance[i][j]);
+        }
+        printf("\n");
+    }
     free(queue);    
 
 }
 
+
+//strat 1 : on choisit d'aller vers la case la plus eloignée
 t_move decideNextMove(Arena* arena, Snake* s, int** distance){
     int bestDist = -1;
     t_move bestMove = NORTH;
@@ -163,11 +169,48 @@ t_move decideNextMove(Arena* arena, Snake* s, int** distance){
                 (i == 2 && arena->cells[s->y][s->x].wallBottom) ||
                 (i == 3 && arena->cells[s->y][s->x].wallLeft))) {
 
-                    if (distance[ny][nx]<bestDist){
+                    if (distance[ny][nx]>bestDist){
                         bestDist=distance[ny][nx];
                         bestMove=(t_move)i;
                     }
         }
     }
+    printf("bestDist: %d\n", bestDist);
     return bestMove;
 }
+
+//strat 2 : on choisit d'aller vers la case la plus eloignée qui est safe
+t_move decideSafeMove(Arena* arena, Snake* s, int** distance) {
+    int minDist = INT_MAX; 
+    t_move safeMove = NORTH; 
+
+    
+    int dx[] = {0, 1, 0, -1};
+    int dy[] = {-1, 0, 1, 0};
+
+    
+    for (int i = 0; i < 4; i++) {
+        
+        int nx = s->x + dx[i];
+        int ny = s->y + dy[i];
+
+        
+        if (nx >= 0 && nx < arena->sizeX && ny >= 0 && ny < arena->sizeY) {
+            
+            if (distance[ny][nx] != -1 && distance[ny][nx] < minDist &&
+                !arena->cells[ny][nx].snake &&
+                !((i == 0 && arena->cells[s->y][s->x].wallTop) ||
+                  (i == 1 && arena->cells[s->y][s->x].wallRight) ||
+                  (i == 2 && arena->cells[s->y][s->x].wallBottom) ||
+                  (i == 3 && arena->cells[s->y][s->x].wallLeft))) {
+                
+                minDist = distance[ny][nx];
+                safeMove = (t_move)i;
+            }
+        }
+    }
+
+    return safeMove; 
+}
+
+

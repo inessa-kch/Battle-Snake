@@ -1,8 +1,9 @@
 #ifndef SNAKE_H
 #define SNAKE_H
 #include "snakeAPI.h"
+#include "arena.h"
 
-struct Arena;
+//struct Arena;
 
 typedef struct {
     int x;
@@ -21,8 +22,10 @@ typedef struct _snake {
 Snake* initSnake(int x, int y);
 void freeSnake(Snake* snake);
 t_move sendMySnakeMove();
-void moveSnake(Snake** head, t_move dir, int grow);
-
+void moveSnake(Snake** head, t_move dir, int grow, Arena* arena);
+void markAccessibleCells(Arena* arena,Snake* s,int** distance);
+t_move decideNextMove(Arena* arena, Snake* s, int** distance);
+t_move decideSafeMove(Arena* arena, Snake* s, int** distance);
 
 
 

@@ -57,7 +57,7 @@ Arena* initArena(char* gameType, int* x) {
             } else {
                 arena->cells[i][j].wallRight = 0;
             }
-            arena->cells[i][j].snake = NULL;
+            arena->cells[i][j].snake = 0;
         }
     }
 
@@ -104,7 +104,7 @@ void freeArena(Arena* arena) {
 }
 
 //Print the Arena
-void printArenax(Arena* arena) {
+void myprintArena(Arena* arena) {
     setlocale(LC_CTYPE, "");
     printf(".");
     for (int j = 0; j < arena->sizeX; j++) {
