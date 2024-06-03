@@ -1,0 +1,10 @@
+##Algorithms
+
+
+1.Greedy Algorithm
+2.Depth-First Search (DFS)
+3.Breadth-First Search (BFS)
+4.A Algorithm*
+5.Dijkstra's Algorithm
+6.Potential Fields
+7.RRT (Rapidly-exploring Random Trees)

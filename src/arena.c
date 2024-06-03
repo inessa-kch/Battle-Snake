@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <wchar.h>
+#include <locale.h>
 #include "arena.h"
 
 void waitForSnakeGame(char* gameType, char* gameName, int* sizeX, int* sizeY, int* nbWalls);
@@ -22,18 +24,6 @@ Arena* initArena(char* gameType, int* x) {
     int* walls = (int*)malloc(nbWalls * 4 * sizeof(int));
 
     *x = getSnakeArena(walls);
-  
-    
-    // Print the walls' data
-    printf("Walls' data:\n");
-    for (int i = 0; i < nbWalls * 4; i += 4) {
-        printf("Wall %d: (%d, %d) - (%d, %d)\n", i / 4 + 1, walls[i], walls[i + 1], walls[i + 2], walls[i + 3]);
-    }
-    printf("size X :%d\n",sizeX);
-    printf("size Y :%d\n",sizeY);
-    printf("nbWalls :%d\n",nbWalls);
-
-
 
     Arena* arena = (Arena*)malloc(sizeof(Arena));
     arena->sizeX = sizeX;
@@ -67,6 +57,7 @@ Arena* initArena(char* gameType, int* x) {
             } else {
                 arena->cells[i][j].wallRight = 0;
             }
+            arena->cells[i][j].snake = NULL;
         }
     }
 
@@ -112,24 +103,25 @@ void freeArena(Arena* arena) {
     free(arena);
 }
 
-// Print the Arena
+//Print the Arena
 void printArenax(Arena* arena) {
+    setlocale(LC_CTYPE, "");
     printf(".");
     for (int j = 0; j < arena->sizeX; j++) {
-        printf("---.");
+        printf("\u2501\u2501\u2501.");
     }
     printf("\n");
     for (int i = 0; i < arena->sizeY; i++) {
         for (int j = 0; j < arena->sizeX; j++) {
             if (arena->cells[i][j].wallLeft) {
-                printf("|");
+                printf("\u2503");
             } else {
                 printf(" ");
             }
             printf("   ");
         }
         if (arena->cells[i][arena->sizeX - 1].wallRight) {
-            printf("|");
+            printf("\u2503");
         } else {
             printf(" ");
         }
@@ -137,7 +129,7 @@ void printArenax(Arena* arena) {
         printf(".");
         for (int j = 0; j < arena->sizeX; j++) {
             if (arena->cells[i][j].wallBottom) {
-                printf("---.");
+                printf("\u2501\u2501\u2501.");
             } else {
                 printf("   .");
             }
@@ -145,4 +137,13 @@ void printArenax(Arena* arena) {
         printf("\n");
     }
 }
+
+
+
+
+
+
+
+
+
 

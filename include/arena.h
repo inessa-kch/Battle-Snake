@@ -1,5 +1,9 @@
 #ifndef ARENA_H
 #define ARENA_H
+#include "snake.h"
+
+
+
 
 
 typedef struct {
@@ -7,6 +11,7 @@ typedef struct {
     int wallBottom;
     int wallLeft;
     int wallRight;
+    int snake; // 0 if no snake, 1 if my snake, 2 if enemy snake
 } Cell;
 
 typedef struct {

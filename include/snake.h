@@ -1,25 +1,29 @@
 #ifndef SNAKE_H
 #define SNAKE_H
-
+#include "snakeAPI.h"
 
 struct Arena;
+
+typedef struct {
+    int x;
+    int y;
+} Position;
+
+
 
 typedef struct _snake {
     int x;
     int y;
-    int dir;
-    int size;
     struct _snake* suivant;
 } Snake;
 
 
-Snake* initSnake(int x, int y, int size);
+Snake* initSnake(int x, int y);
 void freeSnake(Snake* snake);
-void growSnake(Snake* snake);
-int dirSnake(Snake* s, Arena* a);
-void updateSnakePosition(Snake* head);
-//void changeDirection(Snake* snake, int newDir);
-//void printSnake(Snake* snake);
+t_move sendMySnakeMove();
+void moveSnake(Snake** head, t_move dir, int grow);
+
+
 
 
 
