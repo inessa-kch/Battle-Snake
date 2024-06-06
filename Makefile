@@ -11,12 +11,12 @@ OBJS = $(OBJ)clientAPI.o $(OBJ)snakeAPI.o $(OBJ)arena.o $(OBJ)snake.o $(OBJ)main
 all: $(PROGRAMS)
 
 $(PROGRAMS): $(OBJS)
-	$(CC) -o $@ $^
+	$(CC) -o $@ $^ -lm
 
 
 
 $(OBJ)%.o:$(SRC)%.c
-	$(CC) -o $@ -c $< $(CFLAGS) -I$(INCLUDE)
+	$(CC) -o $@ -c $< $(CFLAGS) -I$(INCLUDE) -lm
 
 
 

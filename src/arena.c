@@ -103,6 +103,10 @@ void freeArena(Arena* arena) {
     free(arena);
 }
 
+
+
+
+
 //Print the Arena
 void myprintArena(Arena* arena) {
     setlocale(LC_CTYPE, "");

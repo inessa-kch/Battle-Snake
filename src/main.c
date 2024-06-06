@@ -12,7 +12,7 @@ int grow;
 int main() {
     connectToServer("localhost", 1234, "iness");
     int y;
-    Arena* arena = initArena("TRAINING RANDOM_PLAYER difficulty=1", &y);
+    Arena* arena = initArena("TRAINING RANDOM_PLAYER ", &y);
     Snake* mySnake = NULL;
     Snake* enemySnake = NULL;
     if (y == 0) {
@@ -38,14 +38,19 @@ int main() {
     int enemyTurn = 0;
 
     
-    int** distance = (int**)malloc(arena->sizeY * sizeof(int*));
+    int** distanceMySnake = (int**)malloc(arena->sizeY * sizeof(int*));
     for (int i = 0; i < arena->sizeY; i++) {
-        distance[i] = (int*)malloc(arena->sizeX * sizeof(int));
+        distanceMySnake[i] = (int*)malloc(arena->sizeX * sizeof(int));
+    }
+
+        int** distanceEnemySnake = (int**)malloc(arena->sizeY * sizeof(int*));
+    for (int i = 0; i < arena->sizeY; i++) {
+        distanceEnemySnake[i] = (int*)malloc(arena->sizeX * sizeof(int));
     }
 
 
     while (Gamerunning) {
-        //tour counter
+        
         if (tour % 10 == 0) {
                 grow=1;
             }
@@ -53,11 +58,13 @@ int main() {
                 grow=0;
             }
 
-
+        
         if (y == 0 && !myTurn) {
-                markAccessibleCells(arena, mySnake, distance);
-                //t_move dir=decideNextMove(arena, mySnake, distance);
-                t_move dir=decideSafeMove(arena, mySnake, distance);
+                markAccessibleCells(arena, mySnake, distanceMySnake);
+                printf("%d\n",countAccessibleCells(arena, distanceMySnake));
+                //t_move dir=decideNextMove(arena, mySnake, distanceMySnake);
+                t_move dir= decideMinimaxMove(arena, mySnake, enemySnake, distanceMySnake,distanceEnemySnake, 6);
+                
                 int i=sendMove(dir);
                 if (i==LOSING_MOVE){
                     printf("You lost\n");
@@ -72,19 +79,19 @@ int main() {
                     printf("x1: %d, y1: %d\n", tmp->x, tmp->y);
                     tmp = tmp->suivant;
                 }
-            ///////////////////////////////////////////
+                ///////////////////////////////////////////
                 myTurn = 1;
 
 
 
         } else if (y == 1 && !enemyTurn) {
+                markAccessibleCells(arena, enemySnake, distanceEnemySnake);
                 t_move enemyMove;
                 t_return_code moveReceived = getMove(&enemyMove);
                 if (moveReceived == LOSING_MOVE) {
                     printf("You won\n");
                     break;
                 }
-                //int j=getEnemySnakePosition(enemySnake);
                 moveSnake(&enemySnake, enemyMove,grow,arena);
                 ///////////////////////////////////////////
                 //some tests to check if the snake is moving correctly
@@ -102,6 +109,7 @@ int main() {
         y = (y + 1) % 2;
    
         if (myTurn && enemyTurn) {
+            printf("evaluate how the game is going %d\n",evaluateBoard(arena, mySnake, enemySnake, distanceMySnake, distanceEnemySnake));
             tour++;
             printf("tour: %d\n", tour);
             myTurn = 0;
@@ -111,9 +119,14 @@ int main() {
 
     }
     for (int i = 0; i < arena->sizeY; i++) {
-        free(distance[i]);
+        free(distanceMySnake[i]);
     }
-    free(distance);
+    free(distanceMySnake);
+
+        for (int i = 0; i < arena->sizeY; i++) {
+        free(distanceEnemySnake[i]);
+    }
+    free(distanceEnemySnake);
 
     freeArena(arena);
     freeSnake(mySnake);

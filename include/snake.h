@@ -3,7 +3,7 @@
 #include "snakeAPI.h"
 #include "arena.h"
 
-//struct Arena;
+
 
 typedef struct {
     int x;
@@ -25,15 +25,10 @@ t_move sendMySnakeMove();
 void moveSnake(Snake** head, t_move dir, int grow, Arena* arena);
 void markAccessibleCells(Arena* arena,Snake* s,int** distance);
 t_move decideNextMove(Arena* arena, Snake* s, int** distance);
-t_move decideSafeMove(Arena* arena, Snake* s, int** distance);
-
-
-
-
-
-
-
-
+int countAccessibleCells(Arena* arena, int** distance);
+int evaluateBoard(Arena* arena, Snake* mySnake, Snake* enemySnake, int** distanceMySnake, int** distanceEnemySnake);
+int minimax(Arena* arena, Snake* mySnake, Snake* enemySnake, int** distanceMySnake, int** distanceEnemySnake, int depth, int alpha, int beta, int maximizingPlayer);
+t_move decideMinimaxMove(Arena* arena, Snake* mySnake, Snake* enemySnake, int** distanceMySnake,int** distanceEnemySnake, int depth);
 
 
 
