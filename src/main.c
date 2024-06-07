@@ -16,9 +16,9 @@ int main() {
 
     connectToServer("localhost", 1234, "iness");
 
-while (1){
+//while (1){
     int y;
-    Arena* arena = initArena(" ", &y);
+    Arena* arena = initArena("TRAINING SUPER_PLAYER ", &y);
     Snake* mySnake = NULL;
     Snake* enemySnake = NULL;
     if (y == 0) {
@@ -69,7 +69,7 @@ while (1){
                 markAccessibleCells(arena, mySnake, distanceMySnake);
                 printf("%d\n",countAccessibleCells(arena, distanceMySnake));
                 //t_move dir=decideNextMove(arena, mySnake, distanceMySnake);
-                t_move dir= decideMinimaxMove(arena, mySnake, enemySnake, distanceMySnake,distanceEnemySnake, 10);
+                t_move dir= decideMinimaxMove(arena, mySnake, enemySnake, distanceMySnake,distanceEnemySnake, 12, grow);
                 
                 int i=sendMove(dir);
                 if (i==LOSING_MOVE){
@@ -138,7 +138,7 @@ while (1){
     freeArena(arena);
     freeSnake(mySnake);
     freeSnake(enemySnake);
-}
+//}
     closeConnection();
     return 0;
 }
