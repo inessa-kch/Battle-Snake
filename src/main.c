@@ -10,9 +10,15 @@
 int grow;
 
 int main() {
+
+
+
+
     connectToServer("localhost", 1234, "iness");
+
+while (1){
     int y;
-    Arena* arena = initArena("TRAINING RANDOM_PLAYER ", &y);
+    Arena* arena = initArena(" ", &y);
     Snake* mySnake = NULL;
     Snake* enemySnake = NULL;
     if (y == 0) {
@@ -63,7 +69,7 @@ int main() {
                 markAccessibleCells(arena, mySnake, distanceMySnake);
                 printf("%d\n",countAccessibleCells(arena, distanceMySnake));
                 //t_move dir=decideNextMove(arena, mySnake, distanceMySnake);
-                t_move dir= decideMinimaxMove(arena, mySnake, enemySnake, distanceMySnake,distanceEnemySnake, 6);
+                t_move dir= decideMinimaxMove(arena, mySnake, enemySnake, distanceMySnake,distanceEnemySnake, 10);
                 
                 int i=sendMove(dir);
                 if (i==LOSING_MOVE){
@@ -74,11 +80,11 @@ int main() {
                 moveSnake(&mySnake, dir,grow,arena);
                 ///////////////////////////////////////////
                 //some tests to check if the snake is moving correctly
-                Snake* tmp = mySnake;
-                while (tmp != NULL) {
-                    printf("x1: %d, y1: %d\n", tmp->x, tmp->y);
-                    tmp = tmp->suivant;
-                }
+                //Snake* tmp = mySnake;
+                // while (tmp != NULL) {
+                //     printf("x1: %d, y1: %d\n", tmp->x, tmp->y);
+                //     tmp = tmp->suivant;
+                // }
                 ///////////////////////////////////////////
                 myTurn = 1;
 
@@ -95,11 +101,11 @@ int main() {
                 moveSnake(&enemySnake, enemyMove,grow,arena);
                 ///////////////////////////////////////////
                 //some tests to check if the snake is moving correctly
-                Snake* tmp2 = enemySnake;
-                while (tmp2 != NULL) {
-                    printf("x2: %d, y2: %d\n", tmp2->x, tmp2->y);
-                    tmp2 = tmp2->suivant;
-                }
+                // Snake* tmp2 = enemySnake;
+                // while (tmp2 != NULL) {
+                //     printf("x2: %d, y2: %d\n", tmp2->x, tmp2->y);
+                //     tmp2 = tmp2->suivant;
+                // }
                 ///////////////////////////////////////////
 
                 enemyTurn = 1;
@@ -118,6 +124,7 @@ int main() {
         }
 
     }
+    
     for (int i = 0; i < arena->sizeY; i++) {
         free(distanceMySnake[i]);
     }
@@ -131,11 +138,7 @@ int main() {
     freeArena(arena);
     freeSnake(mySnake);
     freeSnake(enemySnake);
+}
     closeConnection();
     return 0;
 }
-
-
-
-
-

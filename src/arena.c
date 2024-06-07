@@ -91,7 +91,28 @@ Arena* initArena(char* gameType, int* x) {
 }
 
 
+Arena* copyArena(Arena* a){
+    Arena* arena = (Arena*)malloc(sizeof(Arena));
+    arena->sizeX = a->sizeX;
+    arena->sizeY = a->sizeY;
+    arena->cells = (Cell**)malloc((a->sizeY) * sizeof(Cell*));
 
+    for (int i = 0; i < (a->sizeY); i++) {
+        arena->cells[i] = (Cell*)malloc((a->sizeX) * sizeof(Cell));
+
+    }
+
+    for (int i = 0; i < (a->sizeY); i++) {
+        for (int j = 0; j < (a->sizeX); j++) {
+            arena->cells[i][j].wallTop = a->cells[i][j].wallTop;
+            arena->cells[i][j].wallBottom = a->cells[i][j].wallBottom;
+            arena->cells[i][j].wallLeft = a->cells[i][j].wallLeft;
+            arena->cells[i][j].wallRight = a->cells[i][j].wallRight;
+            arena->cells[i][j].snake = a->cells[i][j].snake;
+        }
+    }
+    return arena;
+}
 
 
 // Free memory allocated for the Arena

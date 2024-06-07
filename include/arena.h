@@ -24,7 +24,7 @@ typedef struct {
 
 
 Arena* initArena(char* gameType, int* x);
-
+Arena* copyArena(Arena* a);
 void freeArena(Arena* arena);
 
 void myprintArena(Arena* arena);
