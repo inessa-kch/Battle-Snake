@@ -73,6 +73,7 @@ int main() {
                 
                 int i=sendMove(dir);
                 if (i==LOSING_MOVE){
+                    sendComment("GG");
                     printf("You lost\n");
                     break;
                 }
@@ -95,6 +96,7 @@ int main() {
                 t_move enemyMove;
                 t_return_code moveReceived = getMove(&enemyMove);
                 if (moveReceived == LOSING_MOVE) {
+                    sendComment("YOU LOST!!!");
                     printf("You won\n");
                     break;
                 }

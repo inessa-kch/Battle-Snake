@@ -1,16 +1,14 @@
-# Snake-EI3-2024
-
 ## Introduction
-Ce projet a été réalisé dans le cadre de mes études à l'université. J'ai développé un bot pour le jeu Snake capable de se déplacer de manière autonome dans une arène, en évitant les obstacles, les murs et lui-même, grâce à diverses stratégies et algorithmes.
+Ce projet a été réalisé dans le cadre de mes études à l'université. J'ai développé un bot pour le jeu Snake capable de se déplacer de manière autonome dans une arène grâce à diverses stratégies et algorithmes.
 
 
 ## But du jeu
-Ce jeu reprend les bases du célèbre Snake. Deux serpents s'affrontent dans une arène, évitant murs, adversaires et eux-mêmes. Le but est de coder un serpent qui reste en vie le plus longtemps possible pour gagner la partie. Que le meilleur programme gagne !
+Ce jeu reprend les bases du célèbre Snake. Deux serpents s'affrontent dans une arène, évitant murs, adversaires et eux-mêmes. Le but est de coder un serpent qui reste en vie le plus longtemps possible pour gagner la partie. Que le meilleur programme gagne ! :D
 
 ## Règles de base
-- TTaille de l’arène : Variable (L x H), communiquée par le serveur au début du jeu.
+- Taille de l’arène : Variable (L x H), communiquée par le serveur au début du jeu.
 - Position de départ : Joueur 0 commence à (2, H/2) et Joueur 1 à (L-3, H/2).
-- Croissance des serpents : Chaque serpent grandit d'une case tous les 10 tours (incluant le tour 0).
+- Croissance des serpents : Chaque serpent grandit d'une case tous les 10 tours.
 
 *Tous les mouvements seront exécutés sur un serveur distant qui renverra les informations de mises à jour aux joueurs via l’API fournit. Il n'est donc pas possible d'exécuter de mouvements invalides.*
 
