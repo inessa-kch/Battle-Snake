@@ -5,8 +5,8 @@
 #include "arena.h"
 #include "snake.h"
 
-#define INT_MAX 50
-//le ​joueur 0 (qui joue le premier) commence à la position (2, H/2) et le ​joueur 1​ à la position ​(L-3, H/2)​.
+
+
 
 Snake* initSnake(int x, int y) {
     Snake* s = (Snake*)malloc(sizeof(Snake));
@@ -124,52 +124,11 @@ void moveSnake(Snake** head, t_move dir, int grow, Arena* arena) {
 
 
 
-
-
-
-
-void undoMoveSnake(Snake* snake, Position* originalBody, int originalLength, Arena* arena) {
-    // Restore original head position
-    Position originalHead = originalBody[0];
-    arena->cells[snake->y][snake->x].snake = 0;
-    snake->x = originalHead.x;
-    snake->y = originalHead.y;
-    arena->cells[snake->y][snake->x].snake = 1;
-
-    // Restore body segments
-    Snake* current = snake->suivant;
-    for (int i = 1; i < originalLength; i++) {
-        current->x = originalBody[i].x;
-        current->y = originalBody[i].y;
-        current = current->suivant;
-    }
-
-    // Remove additional segment if it was added due to growth
-    if (snake->length > originalLength) {
-        Snake* last = snake;
-        while (last->suivant->suivant != NULL) {
-            last = last->suivant;
-        }
-        free(last->suivant);
-        last->suivant = NULL;
-        snake->length--;
-    }
-}
-
-
-
-
-
-
-
-
-
 //inspired by a code i did last year on bfs
-
 void markAccessibleCells(Arena* arena,Snake* s,int** distance){
     for (int i = 0; i < arena->sizeY; i++) {
         for (int j = 0; j < arena->sizeX; j++) {
-            distance[i][j] = -1; // -1 indicates unvisited cells
+            distance[i][j] = -1; 
         }
     }
     Position* queue=(Position*)malloc(arena->sizeX*arena->sizeY*sizeof(Position));
@@ -202,18 +161,10 @@ void markAccessibleCells(Arena* arena,Snake* s,int** distance){
             }
         }
     }
-    // for (int i = 0; i < arena->sizeY; i++) {
-    //     for (int j = 0; j < arena->sizeX; j++) {
-    //         printf("%d ", distance[i][j]);
-    //     }
-    //     printf("\n");
-    // }
     free(queue);    
-
 }
 
 
-//strat 1 : on choisit d'aller vers la prochaine case accessible
 t_move decideNextMove(Arena* arena, Snake* s, int** distance){
     int bestDist = -1;
     t_move bestMove = NORTH;
@@ -258,7 +209,7 @@ t_move decideNextMove(Arena* arena, Snake* s, int** distance){
 
 
 
-// compte le nombre de cases accessibles
+
 int countAccessibleCells(Arena* arena, int** distance) {
     int accessibleCells = 0;
     for (int i = 0; i < arena->sizeY; i++) {
@@ -275,28 +226,16 @@ int countAccessibleCells(Arena* arena, int** distance) {
 
 int evaluateBoard(Arena* arena, Snake* mySnake, Snake* enemySnake, int** distanceMySnake, int** distanceEnemySnake) {
     markAccessibleCells(arena, mySnake, distanceMySnake);
-    // printf("my accessible cells\n");
-    // for (int i = 0; i < arena->sizeY; i++) {
-    //      for (int j = 0; j < arena->sizeX; j++) {
-    //         printf("%d ", distanceMySnake[i][j]);
-    //     }
-    //     printf("\n");
-    // }
+
     markAccessibleCells(arena, enemySnake, distanceEnemySnake);
-    // printf("enemy accessible cells\n");
-    // for (int i = 0; i < arena->sizeY; i++) {
-    //     for (int j = 0; j < arena->sizeX; j++) {
-    //         printf("%d ", distanceEnemySnake[i][j]);
-    //     }
-    //     printf("\n");
-    // }
+
     
     int myAccessibleCells = countAccessibleCells(arena, distanceMySnake);
     int enemyAccessibleCells = countAccessibleCells(arena, distanceEnemySnake);
 
     int score = myAccessibleCells - enemyAccessibleCells;
 
-    // Additional heuristics
+
     int myProximityToEnemy = abs(mySnake->x - enemySnake->x) + abs(mySnake->y - enemySnake->y);
     int enemyProximityToCenter = abs(enemySnake->x - arena->sizeX / 2) + abs(enemySnake->y - arena->sizeY / 2);
     
@@ -309,120 +248,12 @@ int evaluateBoard(Arena* arena, Snake* mySnake, Snake* enemySnake, int** distanc
 
 
 
-
-
-// int minimax(Arena* arena, Snake* mySnake, Snake* enemySnake, int** distanceMySnake, int** distanceEnemySnake, int depth, int alpha, int beta, int maximizingPlayer) {
-//     if (depth == 0) {
-//         return evaluateBoard(arena, mySnake, enemySnake, distanceMySnake, distanceEnemySnake);
-//     }
-
-//     int dx[] = {0, 1, 0, -1};
-//     int dy[] = {-1, 0, 1, 0};
-
-//     if (maximizingPlayer) {
-//         int maxEval = -100000;
-//         for (int i = 0; i < 4; i++) {
-//             int nx = mySnake->x + dx[i];
-//             int ny = mySnake->y + dy[i];
-
-//             if ((nx >= 0 && nx < arena->sizeX && ny >= 0 && ny < arena->sizeY && 
-//                 distanceMySnake[ny][nx] != -1 && !arena->cells[ny][nx].snake) &&
-//                 !((i == 0 && arena->cells[mySnake->y][mySnake->x].wallTop) ||
-//                 (i == 1 && arena->cells[mySnake->y][mySnake->x].wallRight) ||
-//                 (i == 2 && arena->cells[mySnake->y][mySnake->x].wallBottom) ||
-//                 (i == 3 && arena->cells[mySnake->y][mySnake->x].wallLeft))){
-                
-//                 mySnake->x = nx;
-//                 mySnake->y = ny;
-               
-//                 int eval = minimax(arena, mySnake, enemySnake, distanceMySnake,distanceEnemySnake, depth - 1, alpha, beta, 0);
-//                 //printf("eval: %d\n", eval);
-                
-//                 mySnake->x = nx - dx[i];
-//                 mySnake->y = ny - dy[i];
-                
-//                 maxEval = fmax(maxEval, eval);
-//                 alpha = fmax(alpha, eval);
-//                 if (beta <= alpha) {
-//                     break;
-//                 }
-//             }
-//         }
-//         return maxEval;
-//     } else {
-//         int minEval = 100000;
-//         for (int i = 0; i < 4; i++) {
-//             int nx = enemySnake->x + dx[i];
-//             int ny = enemySnake->y + dy[i];
-
-//             if (nx >= 0 && nx < arena->sizeX && ny >= 0 && ny < arena->sizeY && 
-//                 distanceEnemySnake[ny][nx] != -1 && !arena->cells[ny][nx].snake &&
-//                 !((i == 0 && arena->cells[enemySnake->y][enemySnake->x].wallTop) ||
-//                 (i == 1 && arena->cells[enemySnake->y][enemySnake->x].wallRight) ||
-//                 (i == 2 && arena->cells[enemySnake->y][enemySnake->x].wallBottom) ||
-//                 (i == 3 && arena->cells[enemySnake->y][enemySnake->x].wallLeft))) {
-
-               
-//                 enemySnake->x = nx;
-//                 enemySnake->y = ny;
-//                 int eval = minimax(arena, mySnake, enemySnake, distanceMySnake,distanceEnemySnake, depth - 1, alpha, beta, 1);
-            
-//                 enemySnake->x = nx - dx[i];
-//                 enemySnake->y = ny - dy[i];
-//                 minEval = fmin(minEval, eval);
-//                 beta = fmin(beta, eval);
-//                 if (beta <= alpha) {
-//                     break;
-//                 }
-//             }
-//         }
-//         return minEval;
-//     }
-// }
-
-
-
-// t_move decideMinimaxMove(Arena* arena, Snake* mySnake, Snake* enemySnake, int** distanceMySnake,int** distanceEnemySnake, int depth) {
-//     int bestMove = NORTH;
-//     int bestValue = -100000;
-
-//     int dx[] = {0, 1, 0, -1};
-//     int dy[] = {-1, 0, 1, 0};
-
-//     for (int i = 0; i < 4; i++) {
-//         int nx = mySnake->x + dx[i];
-//         int ny = mySnake->y + dy[i];
-
-//         if ((nx >= 0 && nx < arena->sizeX && ny >= 0 && ny < arena->sizeY && 
-//             distanceMySnake[ny][nx] != -1 && !arena->cells[ny][nx].snake) &&
-//             !((i == 0 && arena->cells[mySnake->y][mySnake->x].wallTop) ||
-//             (i == 1 && arena->cells[mySnake->y][mySnake->x].wallRight) ||
-//             (i == 2 && arena->cells[mySnake->y][mySnake->x].wallBottom) ||
-//             (i == 3 && arena->cells[mySnake->y][mySnake->x].wallLeft))){
-            
-//             mySnake->x = nx;
-//             mySnake->y = ny;
-//             int boardValue = minimax(arena, mySnake, enemySnake, distanceMySnake,distanceEnemySnake, depth - 1, -100000, 100000, 0);
-            
-//             mySnake->x = nx - dx[i];
-//             mySnake->y = ny - dy[i];
-
-//             if (boardValue > bestValue) {
-//                 bestValue = boardValue;
-//                 bestMove = (t_move)i;
-//             }
-//         }
-//     }
-//     printf("best move: %d\n", (int)bestMove);
-//     return bestMove;
-// }
-
-
 int minimax(Arena* arena, Snake* mySnake, Snake* enemySnake, int** distanceMySnake, int** distanceEnemySnake, int depth, int alpha, int beta, int maximizingPlayer, int grow) {
     if (depth == 0) {
         return evaluateBoard(arena, mySnake, enemySnake, distanceMySnake, distanceEnemySnake);
     }
 
+    // Vecteurs de déplacement possibles (haut, droite, bas, gauche)
     int dx[] = {0, 1, 0, -1};
     int dy[] = {-1, 0, 1, 0};
 
@@ -432,6 +263,7 @@ int minimax(Arena* arena, Snake* mySnake, Snake* enemySnake, int** distanceMySna
             int nx = mySnake->x + dx[i];
             int ny = mySnake->y + dy[i];
 
+            // on vérifie si la case est valide
             if ((nx >= 0 && nx < arena->sizeX && ny >= 0 && ny < arena->sizeY && 
                 !arena->cells[ny][nx].snake) &&
                 !((i == 0 && arena->cells[mySnake->y][mySnake->x].wallTop) ||
@@ -439,17 +271,23 @@ int minimax(Arena* arena, Snake* mySnake, Snake* enemySnake, int** distanceMySna
                 (i == 2 && arena->cells[mySnake->y][mySnake->x].wallBottom) ||
                 (i == 3 && arena->cells[mySnake->y][mySnake->x].wallLeft))) {
 
+                // on fait une copie de l'arène et du snake pour simuler le mouvement
                 Arena* arenaCopy = copyArena(arena);
                 Snake* mySnakeCopy = copySnake(mySnake);
 
                 moveSnake(&mySnakeCopy, (t_move)i, grow, arenaCopy);
-
+                
                 int eval = minimax(arenaCopy, mySnakeCopy, enemySnake, distanceMySnake, distanceEnemySnake, depth - 1, alpha, beta, 0, grow);
+                // on libère la mémoire des copies
                 freeArena(arenaCopy);
                 freeSnake(mySnakeCopy);
                 
+                // on met à jour la valeur maximale
                 maxEval = fmax(maxEval, eval);
+                
                 alpha = fmax(alpha, eval);
+                // Coupure alpha-beta : si beta est inférieur ou égal à alpha, on arrête l'exploration
+                // Cela signifie que le joueur minimisant a trouvé une meilleure option ailleurs
                 if (beta <= alpha) {
                     break;
                 }
@@ -514,24 +352,18 @@ t_move decideMinimaxMove(Arena* arena, Snake* mySnake, Snake* enemySnake, int** 
 
             moveSnake(&mySnakeCopy, (t_move)i, 0, arenaCopy);
 
+             // Appel de la fonction minimax pour évaluer la valeur du plateau après le mouvement
             int boardValue = minimax(arenaCopy, mySnakeCopy, enemySnake, distanceMySnake, distanceEnemySnake, depth - 1, -100000, 100000, 0, grow);
             freeArena(arenaCopy);
             freeSnake(mySnakeCopy);
 
+            // Mise à jour du meilleur mouvement si une meilleure valeur est trouvée
             if (boardValue > bestValue) {
                 bestValue = boardValue;
                 bestMove = (t_move)i;
             }
         }
     }
-    printf("best move: %d\n", (int)bestMove);
     return bestMove;
 }
 
-
-
-
-//win rate against : random_player:100%
-//                   super_player:90%
-
-//depth of 10 is the best depth for the minimax algorithm

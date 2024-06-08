@@ -8,9 +8,6 @@ void waitForSnakeGame(char* gameType, char* gameName, int* sizeX, int* sizeY, in
 int getSnakeArena(int* walls);
 
 
-
-
-// Initialize the Arena with walls' data including bordering walls
 Arena* initArena(char* gameType, int* x) {
     char gameName[50];
     int sizeX;
@@ -115,7 +112,6 @@ Arena* copyArena(Arena* a){
 }
 
 
-// Free memory allocated for the Arena
 void freeArena(Arena* arena) {
     for (int i = 0; i < arena->sizeY; i++) {
         free(arena->cells[i]);
@@ -125,10 +121,6 @@ void freeArena(Arena* arena) {
 }
 
 
-
-
-
-//Print the Arena
 void myprintArena(Arena* arena) {
     setlocale(LC_CTYPE, "");
     printf(".");
