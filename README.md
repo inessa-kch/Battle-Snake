@@ -1,5 +1,5 @@
 ## Introduction
-Ce projet a été réalisé dans le cadre de mes études à l'université. J'ai développé un bot pour le jeu Snake capable de se déplacer de manière autonome dans une arène grâce à diverses stratégies et algorithmes.
+Ce projet a été réalisé dans le cadre de mes études à l'université. J'ai développé un bot pour le jeu Snake capable de se déplacer de manière autonome dans une arène grâce à l'algorithme Minimax avec élagage alpha-bêta.
 
 
 ## But du jeu

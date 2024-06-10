@@ -15,7 +15,7 @@ int main() {
 //while (1){
     //initialisation des variables
     int y;
-    Arena* arena = initArena("TRAINING SUPER_PLAYER ", &y);
+    Arena* arena = initArena("TRAINING SUPER_PLAYER difficulty=0", &y);
     Snake* mySnake = NULL;
     Snake* enemySnake = NULL;
     if (y == 0) {
@@ -59,7 +59,6 @@ int main() {
         else{
                 grow=0;
             }
-
         
         if (y == 0 && !myTurn) {
                 markAccessibleCells(arena, mySnake, distanceMySnake);
@@ -96,6 +95,7 @@ int main() {
             tour++;
             myTurn = 0;
             enemyTurn = 0;
+            printArena();
         }
 
     }

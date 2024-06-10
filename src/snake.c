@@ -247,7 +247,7 @@ int evaluateBoard(Arena* arena, Snake* mySnake, Snake* enemySnake, int** distanc
 
 
 
-
+//interesting article about minimax algorithm in Snake game : https://coreyja.com/posts/BattlesnakeMinimax/Minimax%20in%20Battlesnake/
 int minimax(Arena* arena, Snake* mySnake, Snake* enemySnake, int** distanceMySnake, int** distanceEnemySnake, int depth, int alpha, int beta, int maximizingPlayer, int grow) {
     if (depth == 0) {
         return evaluateBoard(arena, mySnake, enemySnake, distanceMySnake, distanceEnemySnake);
